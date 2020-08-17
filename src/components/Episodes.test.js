@@ -8,7 +8,8 @@ test('re-renders correctly', () => {
     const {getByRole, findByText, getByAltText } = render(<Episodes episodes={seasonOneEpisodes}/>)
     //check that it cards, select episode 1
     const episodeOne = findByText(/episode 1/i)
-    const episodeOneImg = getByAltText(/Chapter One: The Vanishing of Will Byers/i)
+    // https://developer.paciellogroup.com/blog/2017/04/what-is-an-accessible-name/
+    const episodeOneImg = getByRole('img', {name: /Chapter One: The Vanishing of Will Byers/i})
     const episodeOneTitle = findByText(/Chapter One: The Vanishing of Will Byers/i)
     const episodeOneSummary = findByText(/A young boy mysteriously disappears, and his panicked mother demands that the police find him. Meanwhile, the boy's friends conduct their own search, and meet a mysterious girl in the forest./i)
     // screen.debug()
