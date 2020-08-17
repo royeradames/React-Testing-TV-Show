@@ -610,7 +610,7 @@ const mockResData = {
     }
 }
 
-test('App fetches data and renders it', () => {
+test('App fetches data and renders it', async () => {
     //mock data
     //mockResolvedValueOnce
     // https://jestjs.io/docs/en/mock-function-api#mockfnmockresolvedvalueoncevalue
@@ -619,12 +619,11 @@ test('App fetches data and renders it', () => {
     })
     //render component
 
-    render(<App />)
+    await render(<App />)
     screen.findByText(/Fetching data.../i)
     screen.debug()
-    
+
     //Check it render image, title, body text, dropdown 
-    screen.getByRole('img', {alt: 'Stranger Things'})
     screen.getByRole('img', {name: /Stranger Things/i})
     screen.findByText(/Stranger Things/i)
     screen.findByText(/A love letter to the '80s classics that captivated a generation, Stranger Things is set in 1983 Indiana, where a young boy vanishes into thin air. As friends, family and local police search for answers, they are drawn into an extraordinary mystery involving top-secret government experiments, terrifying supernatural forces and one very strange little girl./i)
