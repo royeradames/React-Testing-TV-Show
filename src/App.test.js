@@ -3,7 +3,7 @@ import React from 'react';
 import App from './App'
 import { render, fireEvent, waitFor, screen } from '@testing-library/react'
 import { act } from 'react-dom/test-utils';
-
+import userEvent from '@testing-library/user-event'
 import { fetchShow as mockFetchShow } from './api/fetchShow'
 //mock the api axio call file
 jest.mock('./api/fetchShow')
@@ -614,23 +614,55 @@ test('App fetches data and renders it', async () => {
     //mock data
     //mockResolvedValueOnce
     // https://jestjs.io/docs/en/mock-function-api#mockfnmockresolvedvalueoncevalue
-    act(() =>{
-        mockFetchShow.mockResolvedValueOnce(mockResData)
-    })
+    mockFetchShow.mockResolvedValueOnce(mockResData)
+    await act(async () => {
+        await render(<App />)
+    });
     //render component
 
-    await render(<App />)
     screen.findByText(/Fetching data.../i)
-    screen.debug()
+    // screen.debug()
 
     //Check it render image, title, body text, dropdown 
-    screen.getByRole('img', {name: /Stranger Things/i})
-    screen.findByText(/Stranger Things/i)
-    screen.findByText(/A love letter to the '80s classics that captivated a generation, Stranger Things is set in 1983 Indiana, where a young boy vanishes into thin air. As friends, family and local police search for answers, they are drawn into an extraordinary mystery involving top-secret government experiments, terrifying supernatural forces and one very strange little girl./i)
-    screen.findByText(/Select a season/i)
+    const imgHeading = screen.getByRole('img', { name: /Stranger Things/i })
+    expect(imgHeading).toHaveProperty('src')
+    expect(imgHeading).toHaveProperty('alt')
+    
+    // screen.debug(imgHeading)
+    const headingOne = screen.getByRole('heading', { name: /Stranger Things/i })
+    expect(headingOne).toHaveTextContent(/Stranger Things/i)
+    // screen.debug(headingOne)
 
+        //check that one of they list of stranger things has a h1 tag
+    // expect(headingOne).toHave('h1')
+    // how to select whole paragraph when there is a b inside <b></b> tag?
+    const mainSummary = screen.getByText(/is set in 1983 Indiana, where a young boy vanishes into thin air. As friends, family and local police search for answers, they are drawn into an extraordinary mystery involving top-secret government experiments, terrifying supernatural forces and one very strange little girl./i)
+    expect(mainSummary).toHaveTextContent(/local police search for answers, they are drawn into an/i)
+    // screen.debug(mainSummary)
 
+    //drown down
+    const selectASesson = screen.getByText(/Select a season/i)
+    expect(selectASesson).toHaveTextContent(/Select a season/i)
+
+    // screen.debug(selectASesson)
+    
     //click select
+    userEvent.click(selectASesson)
+    // screen.debug()
+    const seasonOne = screen.getByRole('option', {name: /Season 1/i})
+    const seasontwo = screen.getByRole('option', {name: /Season 2/i})
+    const seasonThree = screen.getByRole('option', {name: /Season 3/i})
+    const seasonFour = screen.getByRole('option', {name: /Season 4/i})
+
+    expect(seasonOne).toHaveTextContent(/season 1/i)
+    expect(seasontwo).toHaveTextContent(/season 2/i)
+    expect(seasonThree).toHaveTextContent(/season 3/i)
+    expect(seasonFour).toHaveTextContent(/season 4/i)
+    // screen.debug(seasonOne)
+    // screen.debug(seasontwo)
+    // screen.debug(seasonThree)
+    // screen.debug(seasonFour)
+
 
     //component waits for API, then renders data that is returned
     //use the waitfor function to wait for the API call to resolve
