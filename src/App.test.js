@@ -616,7 +616,7 @@ test('App fetches data and renders it', async () => {
     // https://jestjs.io/docs/en/mock-function-api#mockfnmockresolvedvalueoncevalue
     mockFetchShow.mockResolvedValueOnce(mockResData)
     await act(async () => {
-        await render(<App />)
+        render(<App />)
     });
     //render component
 
@@ -627,8 +627,9 @@ test('App fetches data and renders it', async () => {
     const imgHeading = screen.getByRole('img', { name: /Stranger Things/i })
     expect(imgHeading).toHaveProperty('src')
     expect(imgHeading).toHaveProperty('alt')
-    
-    // screen.debug(imgHeading)
+    expect(imgHeading).toHaveClass('poster-imgs')
+    screen.debug(imgHeading)
+
     const headingOne = screen.getByRole('heading', { name: /Stranger Things/i })
     expect(headingOne).toHaveTextContent(/Stranger Things/i)
     // screen.debug(headingOne)
@@ -643,12 +644,12 @@ test('App fetches data and renders it', async () => {
     //drown down
     const selectASesson = screen.getByText(/Select a season/i)
     expect(selectASesson).toHaveTextContent(/Select a season/i)
-
     // screen.debug(selectASesson)
     
-    //click select
+    //click select on dropdown and check that the seasons are there for selection
     userEvent.click(selectASesson)
     // screen.debug()
+
     const seasonOne = screen.getByRole('option', {name: /Season 1/i})
     const seasontwo = screen.getByRole('option', {name: /Season 2/i})
     const seasonThree = screen.getByRole('option', {name: /Season 3/i})
