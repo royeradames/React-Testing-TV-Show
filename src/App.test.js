@@ -625,9 +625,9 @@ test('App fetches data and renders it', async () => {
 
     //Check it render image, title, body text, dropdown 
     const imgHeading = screen.getByRole('img', { name: /Stranger Things/i })
-    expect(imgHeading).toHaveProperty('src')
-    expect(imgHeading).toHaveProperty('alt')
-    expect(imgHeading).toHaveClass('poster-imgs')
+    expect(imgHeading).toHaveAttribute('src')
+    expect(imgHeading).toHaveAttribute('alt')
+    expect(imgHeading).toHaveClass('poster-img')
     screen.debug(imgHeading)
 
     const headingOne = screen.getByRole('heading', { name: /Stranger Things/i })
